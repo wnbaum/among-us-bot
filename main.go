@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
-	"strings"
 	"syscall"
 
 	"github.com/bwmarrin/discordgo"
@@ -99,15 +98,19 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		// 	}
 		// }
 
-		if m.Content == "!m" {
+		rmv := false
+
+		if m.Content == "m" {
 			mute(s, m, true)
+			rmv = true
 		}
 
-		if m.Content == "!u" {
+		if m.Content == "u" {
 			mute(s, m, false)
+			rmv = true
 		}
 
-		if strings.HasPrefix(m.Content, "!") {
+		if rmv {
 			s.ChannelMessageDelete(m.ChannelID, m.ID)
 		}
 		
